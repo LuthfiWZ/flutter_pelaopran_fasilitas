@@ -1,4 +1,4 @@
-import '../config/api_config.dart';
+  import '../config/api_config.dart';
 import 'category.dart';
 import 'status_log.dart';
 
@@ -14,6 +14,7 @@ class Report {
   final String? building;
   final String? room;
   final String? photo;
+  final String? photoUrlFromApi;
   final String status;
   final String statusLabel;
   final String? note;
@@ -33,6 +34,7 @@ class Report {
     this.building,
     this.room,
     this.photo,
+    this.photoUrlFromApi,
     required this.status,
     required this.statusLabel,
     this.note,
@@ -41,8 +43,13 @@ class Report {
     this.updatedAt,
   });
 
-  /// URL lengkap foto untuk ditampilkan (diambil dari path relatif).
-  String get photoUrl => ApiConfig.photoUrl(photo);
+  /// URL lengkap foto untuk ditampilkan.
+  String get photoUrl {
+    if (photoUrlFromApi != null && photoUrlFromApi!.isNotEmpty) {
+      return photoUrlFromApi!;
+    }
+    return ApiConfig.photoUrl(photo);
+  }
 
   bool get isDone => status == 'selesai';
 
@@ -68,6 +75,7 @@ class Report {
       building: json['building'] as String?,
       room: json['room'] as String?,
       photo: json['photo'] as String?,
+      photoUrlFromApi: json['photo_url'] as String?,
       status: json['status'] as String,
       statusLabel: json['status_label'] as String? ?? json['status'] as String,
       note: json['note'] as String?,

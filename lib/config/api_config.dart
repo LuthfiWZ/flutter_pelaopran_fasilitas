@@ -25,6 +25,10 @@ class ApiConfig {
   /// Membangun URL lengkap foto dari path relatif yang dikirim backend.
   static String photoUrl(String? path) {
     if (path == null || path.isEmpty) return '';
-    return '$storageBaseUrl/$path';
+    if (path.startsWith('http://') || path.startsWith('https://')) {
+      return path;
+    }
+    final clean = path.replaceFirst(RegExp(r'^/+'), '');
+    return '$storageBaseUrl/$clean';
   }
 }
