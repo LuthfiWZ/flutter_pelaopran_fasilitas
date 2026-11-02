@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:http_parser/http_parser.dart';
 import 'package:image_picker/image_picker.dart' show XFile;
 
 import '../models/report.dart';
@@ -15,9 +16,28 @@ class ReportService {
       'photo',
       MultipartFile.fromBytes(
         bytes,
-        filename: photo.name,
+        filename: _photoFilename(photo),
+        contentType: _photoMime(photo),
       ),
     );
+  }
+
+  static String _photoFilename(XFile photo) {
+    final name = photo.name.trim();
+    if (name.isNotEmpty && name.contains('.')) return name;
+    final mime = photo.mimeType ?? '';
+    if (mime.contains('png')) return 'photo.png';
+    return 'photo.jpg';
+  }
+
+  static MediaType _photoMime(XFile photo) {
+    final mime = photo.mimeType;
+    if (mime != null && mime.startsWith('image/')) {
+      return MediaType.parse(mime);
+    }
+    final name = photo.name.toLowerCase();
+    if (name.endsWith('.png')) return MediaType('image', 'png');
+    return MediaType('image', 'jpeg');
   }
 
   /// Daftar laporan. Untuk admin menerima parameter filter opsional.

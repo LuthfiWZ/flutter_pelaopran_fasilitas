@@ -26,14 +26,29 @@ class PhotoViewer extends StatelessWidget {
           child: Image.network(
             url,
             fit: BoxFit.contain,
+            webHtmlElementStrategy: WebHtmlElementStrategy.prefer,
             loadingBuilder: (context, child, progress) {
               if (progress == null) return child;
               return const CircularProgressIndicator(color: Colors.white);
             },
-            errorBuilder: (_, _, _) => const Icon(
-              Icons.broken_image_outlined,
-              color: Colors.white70,
-              size: 64,
+            errorBuilder: (_, _, error) => Padding(
+              padding: const EdgeInsets.all(24),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  const Icon(
+                    Icons.broken_image_outlined,
+                    color: Colors.white70,
+                    size: 64,
+                  ),
+                  const SizedBox(height: 12),
+                  Text(
+                    'Gagal memuat foto\n$url\n$error',
+                    textAlign: TextAlign.center,
+                    style: const TextStyle(color: Colors.white70, fontSize: 12),
+                  ),
+                ],
+              ),
             ),
           ),
         ),

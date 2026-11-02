@@ -235,13 +235,17 @@ class _ReportDetailScreenState extends State<ReportDetailScreen> {
                   height: 210,
                   width: double.infinity,
                   fit: BoxFit.cover,
-                  errorBuilder: (_, _, _) => Container(
-                    height: 210,
-                    color: AppColors.fog,
-                    child: const Icon(
-                      Icons.broken_image_outlined,
-                      color: AppColors.stone,
-                      size: 48,
+                  webHtmlElementStrategy: WebHtmlElementStrategy.prefer,
+                  errorBuilder: (_, _, error) => Tooltip(
+                    message: 'Gagal memuat foto\n${report.photoUrl}\n$error',
+                    child: Container(
+                      height: 210,
+                      color: AppColors.fog,
+                      child: const Icon(
+                        Icons.broken_image_outlined,
+                        color: AppColors.stone,
+                        size: 48,
+                      ),
                     ),
                   ),
                 ),

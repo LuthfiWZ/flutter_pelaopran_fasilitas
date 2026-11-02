@@ -19,11 +19,7 @@ class StatusLog {
     this.createdAt,
   });
 
-  String get photoUrl {
-    final apiUrl = photo != null && photo!.isNotEmpty ? (photo!.startsWith('http') ? photo! : null) : null;
-    if (apiUrl != null) return apiUrl;
-    return ApiConfig.photoUrl(photo);
-  }
+  String get photoUrl => ApiConfig.photoUrl(photo);
 
   factory StatusLog.fromJson(Map<String, dynamic> json) {
     String? photoVal = json['photo'] as String?;

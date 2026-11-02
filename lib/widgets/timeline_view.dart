@@ -1,4 +1,3 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
 import '../config/api_config.dart';
@@ -185,16 +184,20 @@ class _ProgressPhoto extends StatelessWidget {
       onTap: () => PhotoViewer.show(context, url),
       child: ClipRRect(
         borderRadius: BorderRadius.circular(AppRadius.input),
-        child: CachedNetworkImage(
-          imageUrl: url,
+        child: Image.network(
+          url,
           height: 120,
           width: 180,
           fit: BoxFit.cover,
-          errorWidget: (_, _, _) => Container(
-            height: 120,
-            width: 180,
-            color: AppColors.fog,
-            child: const Icon(Icons.broken_image_outlined, color: AppColors.stone),
+          webHtmlElementStrategy: WebHtmlElementStrategy.prefer,
+          errorBuilder: (_, _, error) => Tooltip(
+            message: 'Gagal memuat foto\n$url\n$error',
+            child: Container(
+              height: 120,
+              width: 180,
+              color: AppColors.fog,
+              child: const Icon(Icons.broken_image_outlined, color: AppColors.stone),
+            ),
           ),
         ),
       ),

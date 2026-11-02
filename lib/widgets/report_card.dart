@@ -1,4 +1,3 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
 import '../models/report.dart';
@@ -148,17 +147,33 @@ class _PhotoThumb extends StatelessWidget {
       ),
     );
 
-    if (url.isEmpty) return placeholder;
+    if (url.isEmpty) {
+      return Tooltip(
+        message: 'Laporan ini tidak memiliki foto',
+        child: placeholder,
+      );
+    }
 
     return ClipRRect(
       borderRadius: BorderRadius.circular(AppRadius.input),
-      child: CachedNetworkImage(
-        imageUrl: url,
+      child: Image.network(
+        url,
         width: size,
         height: size,
         fit: BoxFit.cover,
-        placeholder: (_, _) => placeholder,
-        errorWidget: (_, _, _) => placeholder,
+        webHtmlElementStrategy: WebHtmlElementStrategy.prefer,
+        errorBuilder: (_, _, error) => Tooltip(
+          message: 'Gagal memuat foto\n$url\n$error',
+          child: Container(
+            width: size,
+            height: size,
+            color: AppColors.fog,
+            child: const Icon(
+              Icons.broken_image_outlined,
+              color: AppColors.stone,
+            ),
+          ),
+        ),
       ),
     );
   }

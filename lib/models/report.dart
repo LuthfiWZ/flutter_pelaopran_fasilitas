@@ -43,13 +43,12 @@ class Report {
     this.updatedAt,
   });
 
-  /// URL lengkap foto untuk ditampilkan.
-  String get photoUrl {
-    if (photoUrlFromApi != null && photoUrlFromApi!.isNotEmpty) {
-      return photoUrlFromApi!;
-    }
-    return ApiConfig.photoUrl(photo);
-  }
+  /// URL lengkap foto untuk ditampilkan (selalu lewat host API yang aktif).
+  String get photoUrl => ApiConfig.photoUrl(
+        (photoUrlFromApi != null && photoUrlFromApi!.isNotEmpty)
+            ? photoUrlFromApi
+            : photo,
+      );
 
   bool get isDone => status == 'selesai';
 
